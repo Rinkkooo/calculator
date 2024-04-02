@@ -1,7 +1,9 @@
 package com.example.calculator;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,9 +18,9 @@ import com.google.android.material.button.MaterialButton;
 public class MainActivity extends AppCompatActivity {
 
     boolean isOperation;
-    float firstNumber;
-    float secondNumber;
+    float firstNumber, secondNumber;
     TextView resultTv;
+    Button resultBtnClick;
     int lastOperations;
 
     @Override
@@ -27,6 +29,15 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         resultTv = findViewById(R.id.resultTv);
+        resultBtnClick = findViewById(R.id.resultBtnClick);
+        resultBtnClick.setVisibility(View.INVISIBLE);
+    }
+
+    public void onButtonClick(View view){
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("RESULT_TEXT", resultTv.getText().toString());
+        startActivity(intent);
+
     }
 
     public void numberClick(View view) {
@@ -44,9 +55,11 @@ public class MainActivity extends AppCompatActivity {
         if (view.getId() == R.id.clearBtn) {
             resultTv.setText("");
         } else if (view.getId() == R.id.plusBtn || view.getId() == R.id.minusBtn || view.getId() == R.id.multiplyBtn || view.getId() == R.id.divisionBtn) {
+            resultBtnClick.setVisibility(View.INVISIBLE);
             firstNumber = Float.valueOf(resultTv.getText().toString());
             isOperation = true;
         } else if (view.getId() == R.id.equalBtn) {
+            resultBtnClick.setVisibility(View.VISIBLE);
             secondNumber = Float.valueOf(resultTv.getText().toString());
             float result = calculateResult();
             String finalResult;
@@ -101,4 +114,6 @@ public class MainActivity extends AppCompatActivity {
             resultTv.setText(String.valueOf(currentValue));
         }
     }
+
+
 }
